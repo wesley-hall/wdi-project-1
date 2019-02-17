@@ -88,6 +88,8 @@ $(() => {
   const inky = new Ghost(209)
   const clyde = new Ghost(210)
 
+  const ghosts = [blinky, pinky, inky, clyde]
+
 
   function placeGhosts() {
     $tiles.removeClass('ghost blinky pinky inky clyde')
@@ -110,10 +112,18 @@ $(() => {
   function moveGhosts() {
     setGhostDirection()
     blinky.currentPosition+= ghostDirection
+    setGhostDirection()
+    inky.currentPosition+= ghostDirection
+    setGhostDirection()
+    pinky.currentPosition+= ghostDirection
+    setGhostDirection()
+    clyde.currentPosition+= ghostDirection
     placeGhosts()
   }
 
   setInterval(moveGhosts, 1000)
+
+  console.log(blinky)
 
 
   // const $stopGhosts = $('#stop')

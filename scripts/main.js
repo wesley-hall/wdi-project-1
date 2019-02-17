@@ -99,19 +99,25 @@ $(() => {
 
   placeGhosts()
 
-  const ghostInterval = setInterval(moveGhosts, 1000)
+  // const ghostInterval = setInterval(moveGhosts, 1000)
+  let ghostDirection
 
-  function moveGhosts(ghost) {
-    const ghostDirection = directionOptions[Math.floor(Math.random() * directionOptions.length)]
+  function setGhostDirection() {
+    ghostDirection = directionOptions[Math.floor(Math.random() * directionOptions.length)]
     console.log(ghostDirection)
-    ghost.currentPosition+= ghostDirection
+  }
+
+  function moveGhosts() {
+    setGhostDirection()
+    blinky.currentPosition+= ghostDirection
     placeGhosts()
   }
 
-  moveGhosts(blinky)
+  setInterval(moveGhosts, 1000)
 
-  const $stopGhosts = $('#stop')
-  $stopGhosts.on('click', clearInterval(ghostInterval))
+
+  // const $stopGhosts = $('#stop')
+  // $stopGhosts.on('click', clearInterval(ghostInterval))
 
 
 

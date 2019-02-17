@@ -26,12 +26,24 @@ $(() => {
 
 
   function placePacman() {
+    $tiles.removeClass('pacman')
     $tiles.eq(pacman.currentPosition).addClass('pacman')
   }
 
   placePacman()
 
 
+  function movePacman() {
+    $('body').on('keydown', function(e) {
+      if (e.which === 37) {
+        pacman.currentPosition--
+        console.log(pacman.currentPosition)
+        placePacman()
+      }
+    })
+  }
+
+  movePacman()
 
 
 

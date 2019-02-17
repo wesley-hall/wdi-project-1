@@ -19,8 +19,9 @@ body {
   flex-basis: 5%;
   background: green;
   border: 1px solid white;
+  padding: 1em;
 }
 
-.pacman {
+.gameboard div.tile.pacman {
   background-color: yellow;
 }

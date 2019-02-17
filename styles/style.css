@@ -7,8 +7,15 @@ body {
   color: white;
 }
 
+h1 {
+  text-align: center;
+}
+
 
 .gameboard {
+  margin: 0 auto;
+  width: 800px;
+  height: 800px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -16,12 +23,29 @@ body {
 }
 
 .gameboard div.tile {
-  flex-basis: 5%;
-  background: green;
+  width: 5%;
+  height: 5%;
+  background-color: green;
   border: 1px solid white;
-  padding: 1em;
 }
 
 .gameboard div.tile.pacman {
-  background-color: yellow;
+  background-image: url(../images/pacman-right.png);
+  background-size: contain;
+}
+
+.gameboard div.tile.blinky {
+  background-color: red;
+}
+
+.gameboard div.tile.ghost.pinky {
+  background-color: pink;
+}
+
+.gameboard div.tile.ghost.inky {
+  background-color: cyan;
+}
+
+.gameboard div.tile.ghost.clyde {
+  background-color: orange;
 }

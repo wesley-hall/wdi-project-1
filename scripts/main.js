@@ -7,7 +7,8 @@ $(() => {
   // Create the game board with div.tile children
   function createBoard() {
     for (let i = 0; i < numOfTiles; i++) {
-      $gameboard.append(`<div id="${i}" class="tile"></div>`)
+      $gameboard.append('<div class="tile"></div>')
+      // $gameboard.append('<div id="${i} class="tile"></div>')
     }
   }
 

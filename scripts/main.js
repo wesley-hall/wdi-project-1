@@ -96,21 +96,22 @@ $(() => {
 
 
   function movePacman() {
-    $('body').on('keydown', function(e) {
-      if (e.which === 37) {
-        pacman.currentPosition+= directions.left
-      }
-      if (e.which === 38) {
-        pacman.currentPosition+= directions.up
-      }
-      if (e.which === 39) {
-        pacman.currentPosition+= directions.right
-      }
-      if (e.which === 40) {
-        pacman.currentPosition+= directions.down
+    $('body').on('keydown', (e) => {
+      switch(e.keyCode) {
+        case 37:
+          pacman.currentPosition+= directions.left
+          break
+        case 38:
+          pacman.currentPosition+= directions.up
+          break
+        case 39:
+          pacman.currentPosition+= directions.right
+          break
+        case 40:
+          pacman.currentPosition+= directions.down
+          break
       }
       placePacman()
-      console.log(pacman.currentPosition)
     })
   }
 

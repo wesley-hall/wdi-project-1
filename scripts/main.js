@@ -18,12 +18,21 @@ $(() => {
   const $tiles = $('.tile')
   console.log($tiles)
 
+  // Place food on all tiles
+  function placeFood() {
+    $tiles.addClass('food')
+  }
+  placeFood()
+
+
+  const $food = $('.food')
   // Place the walls in certain positions
 
   const wallsArray = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,40,60,80,100,120,140,160,180,200,220,240,260,280,300,320,340,360, 39, 59, 79, 99, 119, 139, 159, 179, 199, 219, 239, 259, 279, 299, 319, 339, 359, 379, 380,381,382,383,384,385,386,387,388,389,390,391,392,393,394,395,396,397,398,399,400]
 
   function placeWalls() {
     wallsArray.forEach(wallIndex => {
+      $tiles.eq(wallIndex).removeClass('food')
       $tiles.eq(wallIndex).addClass('wall')
     })
   }

@@ -29,9 +29,19 @@ h1 {
   border: 1px solid white;
 }
 
+
+.gameboard div.tile.food {
+  background-image: url(../images/food.png);
+  background-size: 30%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 .gameboard div.tile.pacman {
   background-image: url(../images/pacman-right.png);
-  background-size: contain;
+  background-size: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .gameboard div.tile.wall {

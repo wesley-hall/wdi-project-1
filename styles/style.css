@@ -34,6 +34,10 @@ h1 {
   background-size: contain;
 }
 
+.gameboard div.tile.wall {
+  background-color: darkred;
+}
+
 .gameboard div.tile.blinky {
   background-color: red;
 }

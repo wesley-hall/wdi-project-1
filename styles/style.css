@@ -14,8 +14,7 @@ h1 {
 
 .gameboard {
   margin: 0 auto;
-  width: 800px;
-  height: 800px;
+  max-width: 800px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -24,7 +23,7 @@ h1 {
 
 .gameboard div.tile {
   width: 5%;
-  height: 5%;
+  padding: 2.5% 0;
   background-color: green;
   border: 1px solid white;
 }

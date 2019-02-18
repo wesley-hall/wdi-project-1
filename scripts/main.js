@@ -1,6 +1,8 @@
 
 $(() => {
 
+  let score = 0
+
   // Characters
   class Character {
     constructor(currentPosition) {
@@ -69,14 +71,16 @@ $(() => {
 
 
 
-  // const $pacman = $('.pacman')
 
   function placePacman() {
+    scoring()
+    $tiles.eq(pacman.currentPosition).removeClass('food')
     $tiles.removeClass('pacman')
     $tiles.eq(pacman.currentPosition).addClass('pacman')
   }
 
   placePacman()
+
 
   // Order is left, up, right, down)
   const directions = {
@@ -93,27 +97,22 @@ $(() => {
     $('body').on('keydown', function(e) {
       if (e.which === 37) {
         pacman.currentPosition+= directions.left
-        placePacman()
       }
       if (e.which === 38) {
         pacman.currentPosition+= directions.up
-        placePacman()
       }
       if (e.which === 39) {
         pacman.currentPosition+= directions.right
-        placePacman()
       }
       if (e.which === 40) {
         pacman.currentPosition+= directions.down
-        placePacman()
       }
+      placePacman()
       console.log(pacman.currentPosition)
     })
   }
 
   movePacman()
-
-
 
 
   function placeGhosts() {
@@ -146,6 +145,19 @@ $(() => {
     setGhostDirection()
     clyde.currentPosition+= ghostDirection
     placeGhosts()
+  }
+
+
+  // Scoring
+
+
+  const $scoreSpan = $('#score')
+
+  function scoring() {
+    if ($tiles.eq(pacman.currentPosition).hasClass('food')) {
+      score+= 10
+    }
+    console.log(`score is ${score}`)
   }
 
 

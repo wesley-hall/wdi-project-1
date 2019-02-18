@@ -24,8 +24,8 @@ h1 {
 .gameboard div.tile {
   width: 5%;
   padding: 2.5% 0;
-  background-color: green;
-  border: 1px solid white;
+  /* background-color: green; */
+  border: 1px solid transparent;
 }
 
 
@@ -44,7 +44,7 @@ h1 {
 }
 
 .gameboard div.tile.wall {
-  background-color: darkred;
+  background-color: darkblue;
 }
 
 .gameboard div.tile.blinky {

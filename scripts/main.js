@@ -1,9 +1,6 @@
 
 $(() => {
 
-  console.log('it works')
-
-
   const $gameboard = $('.gameboard')
   const numOfTiles = 400
 
@@ -50,7 +47,8 @@ $(() => {
     down: 20
   }
 
-  const directionOptions = [directions.left, directions.up, directions.right, directions.down]
+  const directionOptions = Object.values(directions)
+  // [directions.left, directions.up, directions.right, directions.down]
 
 
   function movePacman() {
@@ -78,12 +76,13 @@ $(() => {
   movePacman()
 
   class Ghost extends Character {
-    constructor(currentPosition) {
+    constructor(currentPosition, target) {
       super(currentPosition)
+      this.target = target
     }
   }
 
-  const blinky = new Ghost(189)
+  const blinky = new Ghost(189, )
   const pinky = new Ghost(190)
   const inky = new Ghost(209)
   const clyde = new Ghost(210)
@@ -101,13 +100,15 @@ $(() => {
 
   placeGhosts()
 
-  // const ghostInterval = setInterval(moveGhosts, 1000)
+
   let ghostDirection
 
   function setGhostDirection() {
     ghostDirection = directionOptions[Math.floor(Math.random() * directionOptions.length)]
     console.log(ghostDirection)
   }
+
+  const ghostInterval = setInterval(moveGhosts, 1000)
 
   function moveGhosts() {
     setGhostDirection()
@@ -121,8 +122,9 @@ $(() => {
     placeGhosts()
   }
 
-  setInterval(moveGhosts, 1000)
 
+
+  // console.log(`ghostInterval is ${ghostInterval}`)
   console.log(blinky)
 
 
@@ -130,8 +132,34 @@ $(() => {
   // $stopGhosts.on('click', clearInterval(ghostInterval))
 
 
+  // How to make ghosts move towards(/away from) target??????????
+  // Chase mode?
 
 
+
+
+  // target - current
+  // if result is negative && result % 20 === 0, up
+  // if result is positive && result % 20 === 0, down
+  // if result is negative && result % 20 !== 0, left
+  // if result is positive && result % 20 !== 0, right
+
+
+  //-------------- IGNORE -----------------
+  // if over 20
+  // else if under -20, down
+  // else if over 1, left
+  // else if over -1, right
+
+
+  // Start with different targets for each ghost as explained in game rules
+
+  // How to set line of sight??
+
+  // Once line of sight = true, change target to pacman position
+
+  // If flashing blue ghosts, make negative so they run away
+  // Escape mode?
 
 
 })

@@ -1,6 +1,35 @@
 
 $(() => {
 
+  // Characters
+  class Character {
+    constructor(currentPosition) {
+      this.currentPosition = currentPosition
+    }
+    // movement() {
+    // }
+  }
+
+  // Characters - Pac-Man
+  const pacman = new Character(42)
+
+  // Characters - Ghosts
+  class Ghost extends Character {
+    constructor(currentPosition, target) {
+      super(currentPosition)
+      this.target = target
+    }
+  }
+
+  const blinky = new Ghost(189, 42)
+  const pinky = new Ghost(190)
+  const inky = new Ghost(209)
+  const clyde = new Ghost(210)
+
+  const ghosts = [blinky, pinky, inky, clyde]
+
+  // Create gamebord
+
   const $gameboard = $('.gameboard')
   const numOfTiles = 400
 
@@ -40,21 +69,6 @@ $(() => {
   placeWalls()
 
 
-
-
-
-
-  class Character {
-    constructor(currentPosition) {
-      this.currentPosition = currentPosition
-    }
-    movement() {
-
-    }
-  }
-
-
-  const pacman = new Character(42)
 
   // const $pacman = $('.pacman')
 
@@ -101,19 +115,7 @@ $(() => {
 
   movePacman()
 
-  class Ghost extends Character {
-    constructor(currentPosition, target) {
-      super(currentPosition)
-      this.target = target
-    }
-  }
 
-  const blinky = new Ghost(189, 42)
-  const pinky = new Ghost(190)
-  const inky = new Ghost(209)
-  const clyde = new Ghost(210)
-
-  const ghosts = [blinky, pinky, inky, clyde]
 
 
   function placeGhosts() {
@@ -149,9 +151,6 @@ $(() => {
   }
 
 
-
-  // console.log(`ghostInterval is ${ghostInterval}`)
-  console.log(blinky)
 
   // function startGame() {
   //   console.log('start game')

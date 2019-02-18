@@ -82,7 +82,7 @@ $(() => {
     }
   }
 
-  const blinky = new Ghost(189, )
+  const blinky = new Ghost(189, 42)
   const pinky = new Ghost(190)
   const inky = new Ghost(209)
   const clyde = new Ghost(210)
@@ -128,8 +128,10 @@ $(() => {
   console.log(blinky)
 
 
-  // const $stopGhosts = $('#stop')
-  // $stopGhosts.on('click', clearInterval(ghostInterval))
+  const $stopGhosts = $('#stop')
+  $stopGhosts.on('click', () => {
+    clearInterval(ghostInterval)
+  })
 
 
   // How to make ghosts move towards(/away from) target??????????

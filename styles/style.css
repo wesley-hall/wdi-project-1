@@ -49,17 +49,29 @@ h1 {
 }
 
 .gameboard div.tile.blinky {
-  background-color: red;
+  background-image: url(../images/blinky.png);
+  background-size: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .gameboard div.tile.ghost.pinky {
-  background-color: pink;
+  background-image: url(../images/pinky.png);
+  background-size: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .gameboard div.tile.ghost.inky {
-  background-color: cyan;
+  background-image: url(../images/inky.png);
+  background-size: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 .gameboard div.tile.ghost.clyde {
-  background-color: orange;
+  background-image: url(../images/clyde.png);
+  background-size: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
 }

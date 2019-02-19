@@ -2,11 +2,13 @@
 $(() => {
 
   let score = 0
+  const $scoreSpan = $('#score')
 
   // Characters
   class Character {
-    constructor(currentPosition) {
-      this.currentPosition = currentPosition
+    constructor(startPosition) {
+      this.startPosition = startPosition
+      this.currentPosition = startPosition
     }
     // movement() {
     // }
@@ -17,8 +19,9 @@ $(() => {
 
   // Characters - Ghosts
   class Ghost extends Character {
-    constructor(currentPosition, target) {
-      super(currentPosition)
+    constructor(startPosition, target) {
+      super(startPosition)
+      this.currentPosition = startPosition
       this.target = target
     }
   }
@@ -55,8 +58,6 @@ $(() => {
   }
   placeFood()
 
-  const $food = $('.food')
-
   // Place the walls in certain positions
   const wallsBoundaries = [0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,40,60,80,100,120,140,160,180,200,220,240,260,280,300,320,340,360, 39, 59, 79, 99, 119, 139, 159, 179, 199, 219, 239, 259, 279, 299, 319, 339, 359, 379, 380,381,382,383,384,385,386,387,388,389,390,391,392,393,394,395,396,397,398,399,400]
   const wallsAdditional = [42,43,44,45,46,49,50,53,54,55,56,57,63,69,70,76,83,86,87,88,89,90,91,92,93,96,103,116,123,127,132,136,147,152,165,166,167,172,173,174,181,182,183,189,190,196,197,198,201,202,203,209,210,216,217,218,225,226,227,232,233,234,247,252,263,267,272,276,283,296,303,306,307,308,309,310,311,312,313,316,323,329,330,336,342,343,344,345,346,349,350,353,354,355,356,357]
@@ -75,13 +76,22 @@ $(() => {
 
 
   function placePacman() {
-    scoring()
-    $tiles.eq(pacman.currentPosition).removeClass('food')
-    $tiles.removeClass('pacman')
-    $tiles.eq(pacman.currentPosition).addClass('pacman')
+    // Kind of works with this if.. still allows currentPosition to change but doesn't show that pacman has moved
+    {
+      scoring()
+      $tiles.eq(pacman.currentPosition).removeClass('food')
+      $tiles.removeClass('pacman')
+      $tiles.eq(pacman.currentPosition).addClass('pacman')
+    }
+
   }
 
   placePacman()
+
+  // Better to create function to check if move is allowed?? Instead of if statement inside placePacman???
+  // function moveIsAllowed() {
+  //
+  // }
 
 
   // Order is left, up, right, down)
@@ -97,21 +107,37 @@ $(() => {
 
   function movePacman() {
     $('body').on('keydown', (e) => {
+      const previousMove = pacman.currentPosition
+      let nextMove
       switch(e.keyCode) {
         case 37:
-          pacman.currentPosition+= directions.left
+          if (pacman.currentPosition % 20 > 0) {
+            nextMove = pacman.currentPosition+= directions.left
+          }
           break
         case 38:
-          pacman.currentPosition+= directions.up
+          if (pacman.currentPosition - 20 >= 0) {
+            nextMove = pacman.currentPosition+= directions.up
+          }
           break
         case 39:
-          pacman.currentPosition+= directions.right
+          if (pacman.currentPosition % 20 < 19) {
+            nextMove = pacman.currentPosition+= directions.right
+          }
           break
         case 40:
-          pacman.currentPosition+= directions.down
+          if (pacman.currentPosition + 20 < 400) {
+            nextMove = pacman.currentPosition+= directions.down
+          }
           break
       }
-      placePacman()
+      if ($tiles.eq(nextMove).hasClass('wall')) {
+        nextMove = previousMove
+      } else {
+        nextMove
+        placePacman()
+      }
+
     })
   }
 
@@ -153,13 +179,11 @@ $(() => {
 
   // Scoring
 
-
-  const $scoreSpan = $('#score')
-
   function scoring() {
-    if ($tiles.eq(pacman.currentPosition).hasClass('food')) {
+    if (pacman.currentPosition !== pacman.startPosition && $tiles.eq(pacman.currentPosition).hasClass('food')) {
       score+= 10
     }
+    $scoreSpan.text(score)
     console.log(`score is ${score}`)
   }
 

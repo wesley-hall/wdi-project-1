@@ -36,6 +36,13 @@ h1 {
   background-repeat: no-repeat;
 }
 
+.gameboard div.tile.superfood {
+  background-image: url(../images/superfood.png);
+  background-size: 65%;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
 .gameboard div.tile.pacman {
   background-image: url(../images/pacman-right.png);
   background-size: 100%;

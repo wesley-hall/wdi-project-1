@@ -4,35 +4,6 @@ $(() => {
   let score = 0
   const $scoreSpan = $('#score')
 
-  // Characters
-  class Character {
-    constructor(startPosition) {
-      this.startPosition = startPosition
-      this.currentPosition = startPosition
-    }
-    // movement() {
-    // }
-  }
-
-  // Characters - Pac-Man
-  const pacman = new Character(370)
-
-  // Characters - Ghosts
-  class Ghost extends Character {
-    constructor(startPosition, target) {
-      super(startPosition)
-      this.currentPosition = startPosition
-      this.target = target
-    }
-  }
-
-  const blinky = new Ghost(189, 42)
-  const pinky = new Ghost(190)
-  const inky = new Ghost(209)
-  const clyde = new Ghost(210)
-
-  const ghosts = [blinky, pinky, inky, clyde]
-
   // Create gamebord
 
   const $gameboard = $('.gameboard')
@@ -47,7 +18,6 @@ $(() => {
   }
 
   createBoard()
-
 
   const $tiles = $('.tile')
   console.log($tiles)
@@ -67,7 +37,7 @@ $(() => {
     four: [21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,41,58,61,63,64,65,66,67,68,70,71,72,73,74,75,76,78,81,83,96,98,101,103,105,106,107,108,109,110,111,112,113,114,116,118,121,123,125,134,136,138,141,143,145,147,148,149,151,152,154,156,158,161,163,165,167,168,169,171,172,174,176,178,181,183,185,187,188,194,196,198,203,210,211,212,214,216,218,221,223,224,225,227,228,230,231,232,234,236,238,241,245,247,248,250,251,254,256,258,261,263,265,273,274,276,278,281,283,285,286,287,288,290,291,292,293,294,296,298,301,303,316,318,321,323,324,325,326,327,328,329,330,331,332,333,334,335,336,338,341,358,361,362,363,364,365,366,367,368,369,370,371,372,373,374,375,376,377,378],
     five: [22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,61,62,63,65,66,67,68,69,70,71,72,73,74,75,76,77,102,103,104,105,106,107,108,109,110,111,112,113,114,116,117,118,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,181,182,184,185,186,187,188,189,190,191,192,193,194,195,197,198,201,202,204,205,206,207,208,209,210,211,212,213,214,215,217,218,242,243,244,245,246,247,248,249,250,251,252,253,254,255,256,257,282,283,284,285,286,287,288,289,290,291,292,293,294,296,297,296,298,321,322,323,325,326,327,328,329,330,331,332,333,334,335,336,337,362,363,364,365,366,367,368,369,370,371,372,373,374,375,376,377,378]
   }
-  const wallsArray = wallsBoundaries.concat(levels.five)
+  const wallsArray = wallsBoundaries.concat(levels.one)
 
   function placeWalls() {
     wallsArray.forEach(wallIndex => {
@@ -78,26 +48,22 @@ $(() => {
 
   placeWalls()
 
-
-
-
-  function placePacman() {
-    // Kind of works with this if.. still allows currentPosition to change but doesn't show that pacman has moved
-    {
-      scoring()
-      $tiles.eq(pacman.currentPosition).removeClass('food')
-      $tiles.removeClass('pacman')
-      $tiles.eq(pacman.currentPosition).addClass('pacman')
+  function placeSuperfood() {
+    const superfoodLocation = {
+      one: [41, 58, 341, 358],
+      two: [144, 155, 244, 255],
+      three: [50, 195, 204, 349],
+      four: [69, 192, 207, 243],
+      five: [64, 155, 295, 324]
     }
-
+    superfoodLocation.one.forEach(superfoodIndex => {
+      $tiles.eq(superfoodIndex).removeClass('food')
+      $tiles.eq(superfoodIndex).addClass('superfood animated infinite flash')
+    })
   }
 
-  placePacman()
+  placeSuperfood()
 
-  // Better to create function to check if move is allowed?? Instead of if statement inside placePacman???
-  // function moveIsAllowed() {
-  //
-  // }
 
 
   // Order is left, up, right, down)
@@ -111,43 +77,95 @@ $(() => {
   const directionOptions = Object.values(directions)
 
 
-  function movePacman() {
-    $('body').on('keydown', (e) => {
-      const previousMove = pacman.currentPosition
-      let nextMove
-      switch(e.keyCode) {
-        case 37:
-          if (pacman.currentPosition % 20 > 0) {
-            nextMove = pacman.currentPosition+= directions.left
-          }
-          break
-        case 38:
-          if (pacman.currentPosition - 20 >= 0) {
-            nextMove = pacman.currentPosition+= directions.up
-          }
-          break
-        case 39:
-          if (pacman.currentPosition % 20 < 19) {
-            nextMove = pacman.currentPosition+= directions.right
-          }
-          break
-        case 40:
-          if (pacman.currentPosition + 20 < 400) {
-            nextMove = pacman.currentPosition+= directions.down
-          }
-          break
+  // Characters
+  class Character {
+    constructor(startPosition) {
+      this.startPosition = startPosition
+      this.currentPosition = startPosition
+      this.nextPosition
+    }
+    placeCharacter(characterName) {
+      {
+        scoring()
+        $tiles.eq(this.currentPosition).removeClass('food superfood')
+        $tiles.removeClass(characterName)
+        $tiles.eq(this.currentPosition).addClass(characterName)
       }
-      if ($tiles.eq(nextMove).hasClass('wall')) {
-        nextMove = previousMove
+    }
+    moveIsAllowed(nextPosition) {
+      if ($tiles.eq(nextPosition).hasClass('wall')) {
+        return false
+      } else if ($tiles.eq(this.currentPosition).hasClass('ghost') && nextPosition.hasClass('ghost')) {
+        return false
       } else {
-        nextMove
-        placePacman()
+        return true
       }
-
-    })
+    }
   }
 
-  movePacman()
+
+  let previousPosition
+
+  // Characters - Pac-Man
+  class Pacman extends Character {
+    constructor(startPosition) {
+      super(startPosition)
+    }
+    movePacman() {
+      console.log(`Pacman.. this.nextPosition before move = ${this.nextPosition}`)
+      previousPosition = this.currentPosition
+      $('body').on('keydown', (e) => {
+        switch(e.keyCode) {
+          case 37:
+            this.nextPosition = this.currentPosition+= directions.left
+            break
+          case 38:
+            this.nextPosition = this.currentPosition+= directions.up
+            break
+          case 39:
+            this.nextPosition = this.currentPosition+= directions.right
+            break
+          case 40:
+            this.nextPosition = this.currentPosition+= directions.down
+            break
+        }
+        if (!this.moveIsAllowed(this.nextPosition)) {
+          this.currentPosition = previousPosition
+          pacman.placeCharacter('pacman')
+          console.log(`Pacman.. this.nextPosition on if = ${this.nextPosition}`)
+        } else {
+          console.log(`Pacman.. this.nextPosition on else = ${this.nextPosition}`)
+          pacman.placeCharacter('pacman')
+        }
+      })
+    }
+
+  }
+  const pacman = new Pacman(370)
+
+  // Characters - Ghosts
+  class Ghost extends Character {
+    constructor(startPosition, target) {
+      super(startPosition)
+      this.currentPosition = startPosition
+      this.target = target
+    }
+  }
+
+  const blinky = new Ghost(189, 42)
+  const pinky = new Ghost(190)
+  const inky = new Ghost(209)
+  const clyde = new Ghost(210)
+
+  const ghosts = [blinky, pinky, inky, clyde]
+
+
+
+
+  pacman.placeCharacter('pacman')
+
+
+  pacman.movePacman()
 
 
   function placeGhosts() {
@@ -168,7 +186,7 @@ $(() => {
     console.log(ghostDirection)
   }
 
-  const ghostInterval = setInterval(moveGhosts, 1000)
+  const ghostInterval = setInterval(moveGhosts, 500)
 
   function moveGhosts() {
     setGhostDirection()
@@ -186,8 +204,12 @@ $(() => {
   // Scoring
 
   function scoring() {
-    if (pacman.currentPosition !== pacman.startPosition && $tiles.eq(pacman.currentPosition).hasClass('food')) {
-      score+= 10
+    if (pacman.currentPosition !== pacman.startPosition) {
+      if ($tiles.eq(pacman.currentPosition).hasClass('food')) {
+        score+= 10
+      } else if ($tiles.eq(pacman.currentPosition).hasClass('superfood')) {
+        score+= 50
+      }
     }
     $scoreSpan.text(score)
     console.log(`score is ${score}`)

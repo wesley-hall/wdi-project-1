@@ -92,7 +92,7 @@ $(() => {
     placeCharacter(characterName) {
       {
         scoring()
-        $tiles.eq(this.currentPosition).removeClass('food superfood')
+        $tiles.eq(this.currentPosition).removeClass('food superfood animated infinte flash')
         $tiles.removeClass(characterName)
         $tiles.eq(this.currentPosition).addClass(characterName)
       }

@@ -81,3 +81,10 @@ h1 {
   background-position: center;
   background-repeat: no-repeat;
 }
+
+.gameboard div.tile.ghost.blue {
+  background-image: url(../images/ghost-blue.png);
+  background-size: 100%;
+  background-position: center;
+  background-repeat: no-repeat;
+}

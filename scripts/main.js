@@ -1,11 +1,14 @@
 
 $(() => {
 
-
+  let gameRunning = false
   let score = 0
+  let lives = 3
   const highScore = window.localStorage.getItem('highScore')
   const $scoreSpan = $('#score')
   const $highscoreSpan = $('#highscore')
+  const $livesSpan = $('#lives')
+  const $pacmanDiv = $('.tile.pacman')
 
   // Create gamebord
 
@@ -18,6 +21,9 @@ $(() => {
       $gameboard.append('<div class="tile"></div>')
       // $gameboard.append('<div id="${i} class="tile"></div>')
     }
+    $scoreSpan.text(score)
+    $highscoreSpan.text(highScore)
+    $livesSpan.text(lives)
   }
 
   createBoard()
@@ -69,7 +75,7 @@ $(() => {
 
 
 
-  // Order is left, up, right, down)
+  // Movement directions
   const directions = {
     left: -1,
     up: -20,
@@ -93,17 +99,28 @@ $(() => {
       this.currentPosition = this.startPosition
     }
     placeCharacter(characterName) {
-      {
-        scoring()
-        $tiles.eq(this.currentPosition).removeClass('food superfood animated infinte flash')
-        $tiles.removeClass(characterName)
-        $tiles.eq(this.currentPosition).addClass(characterName)
+      scoring()
+      if ($tiles.eq(pacman.currentPosition).hasClass('superfood')){
+        console.log('there is superfood here!')
       }
+      if ($tiles.eq(pacman.currentPosition).hasClass('ghost')) {
+        lifeLost()
+      }
+      $tiles.eq(this.currentPosition).removeClass('food superfood animated infinte flash')
+      $tiles.removeClass(characterName)
+      $tiles.eq(this.currentPosition).addClass(characterName)
     }
-    moveIsAllowed(nextPosition) {
+    pacMoveIsAllowed(nextPosition) {
       if ($tiles.eq(nextPosition).hasClass('wall')) {
         return false
-      } else if ($tiles.eq(this.currentPosition).hasClass('ghost') && nextPosition.hasClass('ghost')) {
+      } else {
+        return true
+      }
+    }
+    ghostMoveIsAllowed(nextPosition) {
+      if ($tiles.eq(this.nextPosition).hasClass('wall')) {
+        return false
+      } else if ($tiles.eq(this.currentPosition).hasClass('ghost') && $tiles.eq(nextPosition).hasClass('ghost')) {
         return false
       } else {
         return true
@@ -112,11 +129,21 @@ $(() => {
   }
 
 
-    // Characters - Pac-Man
+  //
+  // function modeChase() {
+  //   ghosts.removeClass('blue animated infinite flash')
+  //   ghosts.addCLass('blue animated infinite flash')
+  // }
+
+
+  // Characters - Pac-Man
   class Pacman extends Character {
     constructor(startPosition) {
       super(startPosition)
+      this.direction = directions.right
+      this.nextPosition = this.currentPosition+= this.direction
     }
+    // If this.currentPosition+= this.direction hasClass
     movePacman() {
       $('body').on('keydown', (e) => {
         let previousPosition
@@ -138,27 +165,61 @@ $(() => {
             this.nextPosition = this.currentPosition+= directions.down
             break
         }
-        if (this.moveIsAllowed(this.nextPosition) === false) {
-          console.log(this.moveIsAllowed(this.nextPosition))
-          this.nextPosition = previousPosition
-          // pacman.placeCharacter('pacman')
-          console.log(`Pacman.. this.nextPosition on if = ${this.nextPosition}`)
+        if (!this.pacMoveIsAllowed(this.nextPosition)) {
+          this.currentPosition = previousPosition
         } else {
-          console.log(`Pacman.. this.nextPosition on else = ${this.nextPosition}`)
           pacman.placeCharacter('pacman')
         }
       })
     }
-
   }
   const pacman = new Pacman(370)
+
+
 
   // Characters - Ghosts
   class Ghost extends Character {
     constructor(startPosition, target) {
       super(startPosition)
       this.currentPosition = startPosition
+      this.direction = directions.right
       this.target = target
+      this.ghostInterval
+    }
+    setGhostDirection() {
+      this.direction = directionOptions[Math.floor(Math.random() * directionOptions.length)]
+    }
+    ghostIntelligentDirection() {
+      const ghostDiff = this.target - this.currentPosition
+      if (ghostDiff < 0) {
+        if (ghostDiff % 20 === 0) { // alternative = Math.abs(ghostDiff) > 20, acts differently
+          this.direction = directions.up
+        } else {
+          this.direction = directions.left
+        }
+      } else if (ghostDiff > 0) {
+        if (ghostDiff % 20 === 0) { // alternative = Math.abs(ghostDiff) > 20, acts differently
+          this.direction = directions.down
+        } else {
+          this.direction = directions.right
+        }
+      }
+    }
+    moveGhosts() {
+      this.ghostInterval = setInterval(() => {
+        const previousPosition = this.currentPosition
+        this.setGhostDirection()
+        this.nextPosition = this.currentPosition+= this.direction
+        if (this.ghostMoveIsAllowed(this.nextPosition)) {
+          this.currentPosition= this.nextPosition
+          placeGhosts()
+        } else {
+          this.currentPosition = previousPosition
+        }
+        if ($tiles.eq(this.currentPosition).hasClass('pacman')) {
+          lifeLost()
+        }
+      }, 250)
     }
   }
 
@@ -167,15 +228,27 @@ $(() => {
   const inky = new Ghost(230, superfoodLevels.one[2])
   const clyde = new Ghost(208, superfoodLevels.one[3])
 
-  const ghosts = [blinky, pinky, inky, clyde]
-
-
-
-
   pacman.placeFirstCharacter('pacman')
-
-
   pacman.movePacman()
+
+  function startGame() {
+    pacman.placeCharacter('pacman')
+    blinky.moveGhosts()
+    inky.moveGhosts()
+    pinky.moveGhosts()
+    clyde.moveGhosts()
+  }
+
+  const $startButton = $('#start-game')
+  $startButton.on('click', startGame)
+
+
+
+
+
+
+
+
 
 
   function placeGhosts() {
@@ -189,26 +262,20 @@ $(() => {
   placeGhosts()
 
 
-  let ghostDirection
 
-  function setGhostDirection(ghost) {
-    const ghostDiff = ghost.target - ghost.currentPosition
-    if (ghostDiff < 0) {
-      if (ghostDiff % 20 === 0) { // alternative = Math.abs(ghostDiff) > 20, acts differently
-        ghostDirection = directions.up
-      } else {
-        ghostDirection = directions.left
-      }
-    } else if (ghostDiff > 0) {
-      if (ghostDiff % 20 === 0) { // alternative = Math.abs(ghostDiff) > 20, acts differently
-        ghostDirection = directions.down
-      } else {
-        ghostDirection = directions.right
-      }
-    } else {
-      ghostDirection = directionOptions[Math.floor(Math.random() * directionOptions.length)]
-    }
-  }
+
+
+
+
+  // function modeFrightened() {
+  //   console.log('modeFrightened')
+  //   ghosts.removeClass('blinky inky pinky clyde')
+  //   ghosts.addCLass('blue animated infinite flash')
+  // }
+
+
+
+
 
   // function checkGhostMove(ghost) {
   //   const nextMove = ghost.currentPosition+= ghostDirection
@@ -219,19 +286,43 @@ $(() => {
   //   }
   // }
 
-  const ghostInterval = setInterval(moveGhosts, 500)
+  // Stop game
+  function stopGame() {
+    gameRunning = false
+    $tiles.eq(pacman.currentPosition).removeClass('pacman')
+    $tiles.removeClass('ghost blinky pinky inky clyde')
+    clearInterval(blinky.ghostInterval)
+    clearInterval(inky.ghostInterval)
+    clearInterval(pinky.ghostInterval)
+    clearInterval(clyde.ghostInterval)
+  }
 
-  function moveGhosts() {
-    // console.log(checkGhostMove(blinky))
-    setGhostDirection(blinky)
-    blinky.currentPosition+= ghostDirection
-    setGhostDirection(inky)
-    inky.currentPosition+= ghostDirection
-    setGhostDirection(pinky)
-    pinky.currentPosition+= ghostDirection
-    setGhostDirection(clyde)
-    clyde.currentPosition+= ghostDirection
-    placeGhosts()
+  function gameOver() {
+    console.log('game over!!!')
+    $gameboard.css({
+      display: 'none'
+    })
+  }
+
+  // Life lost
+  function lifeLost() {
+    lives--
+    $livesSpan.text(lives)
+    stopGame()
+    if (lives > 0) {
+      pacman.currentPosition = pacman.startPosition
+      setTimeout(() => {
+        blinky.currentPosition = blinky.startPosition
+        inky.currentPosition = inky.startPosition
+        pinky.currentPosition = pinky.startPosition
+        clyde.currentPosition = clyde.startPosition
+        placeGhosts()
+        startGame()
+      }, 2000)
+    } else {
+      gameOver()
+    }
+
   }
 
 
@@ -249,19 +340,6 @@ $(() => {
     console.log(`score is ${score}`)
   }
 
-
-
-  // function startGame() {
-  //   console.log('start game')
-  // }
-  //
-  // const $startButton = $('#start-game')
-  // $startButton.on('click', startGame)
-
-  const $stopGhosts = $('#stop')
-  $stopGhosts.on('click', () => {
-    clearInterval(ghostInterval)
-  })
 
 
 

@@ -1,8 +1,11 @@
 
 $(() => {
 
+
   let score = 0
+  const highScore = window.localStorage.getItem('highScore')
   const $scoreSpan = $('#score')
+  const $highscoreSpan = $('#highscore')
 
   // Create gamebord
 
@@ -119,7 +122,6 @@ $(() => {
     movePacman() {
       $('body').on('keydown', (e) => {
         let previousPosition
-        console.log(`on keydown t is ${this}`)
         switch(e.keyCode) {
           case 37:
             previousPosition = this.currentPosition
@@ -162,10 +164,10 @@ $(() => {
     }
   }
 
-  const blinky = new Ghost(189, superfoodLevels.one[0])
-  const pinky = new Ghost(190, superfoodLevels.one[1])
-  const inky = new Ghost(209, superfoodLevels.one[2])
-  const clyde = new Ghost(210, superfoodLevels.one[3])
+  const blinky = new Ghost(169, superfoodLevels.one[0])
+  const pinky = new Ghost(191, superfoodLevels.one[1])
+  const inky = new Ghost(230, superfoodLevels.one[2])
+  const clyde = new Ghost(208, superfoodLevels.one[3])
 
   const ghosts = [blinky, pinky, inky, clyde]
 
@@ -194,13 +196,13 @@ $(() => {
   function setGhostDirection(ghost) {
     const ghostDiff = ghost.target - ghost.currentPosition
     if (ghostDiff < 0) {
-      if (ghostDiff % 20 === 0) {
+      if (ghostDiff % 20 === 0) { // alternative = Math.abs(ghostDiff) > 20, acts differently
         ghostDirection = directions.up
       } else {
         ghostDirection = directions.left
       }
     } else if (ghostDiff > 0) {
-      if (ghostDiff % 20 === 0) {
+      if (ghostDiff % 20 === 0) { // alternative = Math.abs(ghostDiff) > 20, acts differently
         ghostDirection = directions.down
       } else {
         ghostDirection = directions.right
@@ -262,6 +264,7 @@ $(() => {
   $stopGhosts.on('click', () => {
     clearInterval(ghostInterval)
   })
+
 
 
   // How to make ghosts move towards(/away from) target??????????

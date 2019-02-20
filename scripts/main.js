@@ -193,14 +193,18 @@ $(() => {
 
   function setGhostDirection(ghost) {
     const ghostDiff = ghost.target - ghost.currentPosition
-    if (ghostDiff < 0 && ghostDiff % 20 === 0) {
-      ghostDirection = directions.up
-    } else if (ghostDiff < 0 && ghostDiff % 20 !== 0) {
-      ghostDirection = directions.left
-    } else if (ghostDiff > 0 && ghostDiff % 20 === 0) {
-      ghostDirection = directions.down
-    } else if (ghostDiff > 0 && ghostDiff % 20 !== 0) {
-      ghostDirection = directions.right
+    if (ghostDiff < 0) {
+      if (ghostDiff % 20 === 0) {
+        ghostDirection = directions.up
+      } else {
+        ghostDirection = directions.left
+      }
+    } else if (ghostDiff > 0) {
+      if (ghostDiff % 20 === 0) {
+        ghostDirection = directions.down
+      } else {
+        ghostDirection = directions.right
+      }
     } else {
       ghostDirection = directionOptions[Math.floor(Math.random() * directionOptions.length)]
     }

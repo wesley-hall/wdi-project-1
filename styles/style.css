@@ -16,11 +16,11 @@ heading {
   margin-bottom: 1em;
 }
 heading img {
-  width: 50%;
+  width: 45%;
 }
 
 main {
-  display: flex;
+  display: none;
   justify-content: center;
   align-items: center;
 }
@@ -170,8 +170,9 @@ main .gameboard {
   text-align: center;
   background-color: darkblue;
   border-radius: 1em;
-  padding: 9em 3em;
+  padding: 6em 3em;
   display: flex;
+  align-items: center;
   flex-direction: column;
   color: white;
 }
@@ -184,7 +185,7 @@ main .gameboard {
 .start-screen .instructions {
   background-color: rgba(0,0,0,0.5);
   border-radius: 1em;
-  padding: 1em;
+  padding: 1em 4em;
 }
 
 .start-screen .instructions h3 {
@@ -195,4 +196,20 @@ main .gameboard {
 
 .start-screen .instructions p {
   margin: 2em 0;
+  line-height: 2em;
+}
+
+#start-game {
+  margin: 2em;
+  color: black;
+  font-size: 1.5em;
+  text-transform: uppercase;
+  background-color: #ee8d29;
+  padding: 1em 3em;
+  border-radius: 1em;
+}
+
+#start-game:hover {
+  background-color: #efad69;
+  cursor: pointer;
 }

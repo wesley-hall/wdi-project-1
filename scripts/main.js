@@ -187,7 +187,7 @@ $(() => {
         } else {
           $tiles.eq(this.currentPosition).attr('data-direction', this.direction)
           pacman.placeCharacter('pacman')
-          this.playChomp()
+          // this.playChomp()
         }
       })
     }
@@ -225,12 +225,14 @@ $(() => {
         } else {
           this.direction = directions.right
         }
+      } else {
+        this.setGhostDirection()
       }
     }
     moveGhosts() {
       this.ghostInterval = setInterval(() => {
         const previousPosition = this.currentPosition
-        // if (this.currentPosition % 20 === pacman.currentPosition % 20 || Math.abs(this.currentPosition - pacman.currentPosition < 5 )) {
+        // if (Math.abs(this.currentPosition - pacman.currentPosition < 5 ) || this.currentPosition % 20 === pacman.currentPosition % 20) {
         //   this.ghostIntelligentDirection()
         // } else {
           this.setGhostDirection()
@@ -259,8 +261,24 @@ $(() => {
   pacman.placeFirstCharacter('pacman')
   pacman.movePacman()
 
+  const $main = $('main')
+  const $startScreen = $('.start-screen')
 
   function startGame() {
+    audio.src = './audio/intro.wav'
+    audio.play()
+    setTimeout(() => {
+      $startScreen.addClass('animated fadeOut 4s')
+    }, 2500)
+    setTimeout(() => {
+      $main.addClass('animated fadeIn')
+      $main.css({
+        display: 'flex'
+      })
+      $startScreen.css({
+        display: 'none'
+      })
+    },3250)
     gameRunning = true
     pacman.placeCharacter('pacman')
     blinky.moveGhosts()
@@ -276,19 +294,13 @@ $(() => {
   $stopButton.on('click', stopGame)
 
 
-
-
-
-
-
-
-
   function placeGhosts() {
     $tiles.removeClass('ghost blinky pinky inky clyde')
     $tiles.eq(blinky.currentPosition).addClass('ghost blinky')
     $tiles.eq(pinky.currentPosition).addClass('ghost pinky')
     $tiles.eq(inky.currentPosition).addClass('ghost inky')
     $tiles.eq(clyde.currentPosition).addClass('ghost clyde')
+
   }
 
   placeGhosts()

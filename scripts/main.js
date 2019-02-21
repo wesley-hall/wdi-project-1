@@ -15,6 +15,8 @@ $(() => {
   const $pacmanDiv = $('.tile.pacman')
   const audio = document.querySelector('audio')
 
+  let ghostsAreBlue = false
+
   // Create gamebord
 
   const $gameboard = $('.gameboard')
@@ -132,11 +134,13 @@ $(() => {
     }
 
     modeFrightened() {
-      console.log('modeFrightened')
-      $('.ghost').addClass('blue')
+      // console.log('modeFrightened')
+      // $('.ghost').addClass('blue')
+      ghostsAreBlue = true
       setTimeout(this.modeChase, 5000)
     }
     modeChase() {
+      ghostsAreBlue = false
       $('.blue').removeClass('blue')
       placeGhosts()
     }
@@ -295,12 +299,17 @@ $(() => {
 
 
   function placeGhosts() {
-    $tiles.removeClass('ghost blinky pinky inky clyde')
+    $tiles.removeClass('ghost blue blinky pinky inky clyde')
     $tiles.eq(blinky.currentPosition).addClass('ghost blinky')
     $tiles.eq(pinky.currentPosition).addClass('ghost pinky')
     $tiles.eq(inky.currentPosition).addClass('ghost inky')
     $tiles.eq(clyde.currentPosition).addClass('ghost clyde')
-
+    if (ghostsAreBlue) {
+      $tiles.eq(blinky.currentPosition).addClass('blue')
+      $tiles.eq(pinky.currentPosition).addClass('blue')
+      $tiles.eq(inky.currentPosition).addClass('blue')
+      $tiles.eq(clyde.currentPosition).addClass('blue')
+    }
   }
 
   placeGhosts()
@@ -333,30 +342,33 @@ $(() => {
 
   // Life lost
   function lifeLost() {
-    lives--
-    if (lives === 2) {
-      $lifeImages.eq(0).remove()
-    } else if (lives === 1) {
-      $lifeImages.eq(1).remove()
+    if (ghostsAreBlue) {
+      score+= 100
     } else {
-      $lifeImages.remove()
+      lives--
+      if (lives === 2) {
+        $lifeImages.eq(0).remove()
+      } else if (lives === 1) {
+        $lifeImages.eq(1).remove()
+      } else {
+        $lifeImages.remove()
+      }
+      stopGame()
+      if (lives > 0) {
+        $tiles.removeAttr('data-direction')
+        pacman.currentPosition = pacman.startPosition
+        setTimeout(() => {
+          blinky.currentPosition = blinky.startPosition
+          inky.currentPosition = inky.startPosition
+          pinky.currentPosition = pinky.startPosition
+          clyde.currentPosition = clyde.startPosition
+          placeGhosts()
+          startGame()
+        }, 2000)
+      } else {
+        gameOver()
+      }
     }
-    stopGame()
-    if (lives > 0) {
-      $tiles.removeAttr('data-direction')
-      pacman.currentPosition = pacman.startPosition
-      setTimeout(() => {
-        blinky.currentPosition = blinky.startPosition
-        inky.currentPosition = inky.startPosition
-        pinky.currentPosition = pinky.startPosition
-        clyde.currentPosition = clyde.startPosition
-        placeGhosts()
-        startGame()
-      }, 2000)
-    } else {
-      gameOver()
-    }
-
   }
 
 

@@ -393,37 +393,4 @@ $(() => {
   })
 
 
-
-
-
-  // How to make ghosts move towards(/away from) target??????????
-  // Chase mode?
-
-
-
-
-  // target - current
-  // if result is negative && result % 20 === 0, up
-  // if result is positive && result % 20 === 0, down
-  // if result is negative && result % 20 !== 0, left
-  // if result is positive && result % 20 !== 0, right
-
-
-  //-------------- IGNORE -----------------
-  // if over 20
-  // else if under -20, down
-  // else if over 1, left
-  // else if over -1, right
-
-
-  // Start with different targets for each ghost as explained in game rules
-
-  // How to set line of sight??
-
-  // Once line of sight = true, change target to pacman position
-
-  // If flashing blue ghosts, make negative so they run away
-  // Escape mode?
-
-
 })

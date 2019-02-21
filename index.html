@@ -14,13 +14,13 @@
       <img src="./images/pacman-logo.png" alt="PAC-MAN">
     </heading>
     <main>
-      <section class="game-info">
+      <section class="game-info" style="display: none;">
         <h2 id="gameover">Gameover!!!</h2>
         <div class="scores">
           <p>Score: <span id="score"></span></p>
           <p>Highscore: <span id="highscore"></span></p>
-          <p id="reset-score">Reset score</p>
-          <p id="reset-highscore">Reset highscore</p>
+          <span class="reset" id="reset-score">Reset score</span>
+          <span class="reset" id="reset-highscore">Reset highscore</span>
         </div>
         <div class="lives">
           <span>Lives:</span>
@@ -29,16 +29,22 @@
           <img class="life" src="./images/pacman-right.png">
         </div>
         <div class="controls">
-          <button id="start-game">START</button>
           <button id="stop">Stop game</button>
         </div>
       </section>
-      <section>
+      <section style="display: none;">
         <div class="gameboard"></div>
       </section>
     </main>
-    <section class="hidden">
+    <section class="start-screen">
       <h2> Welcome to PAC-MAN</h2>
+      <div class="instructions">
+        <h3>Instructions</h3>
+        <p>Control Pac-Man with your keyboard arrow keys</p>
+        <p>Score points by eating food (10 points) and superfood(50 points).</p>
+        <p>You start the game with three lives. Each time you run into a ghost or a ghost runs into you, you will lose a life. Once all three lives have been lost the game will be over.</p>
+      </div>
+      <p id="start-game">Start game</p>
     </section>
     <audio></audio>
   </body>

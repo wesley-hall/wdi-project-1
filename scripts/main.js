@@ -8,6 +8,7 @@ $(() => {
   const $gameoverMessage = $('#gameover')
   const $scoreSpan = $('#score')
   const $highscoreSpan = $('#highscore')
+  const $resetScore = $('#reset-score')
   const $resetHighscore = $('#reset-highscore')
   const $livesDiv = $('.lives')
   const $lifeImages = $('.life')
@@ -139,7 +140,6 @@ $(() => {
       $('.blue').removeClass('blue')
       placeGhosts()
     }
-
   }
 
 
@@ -187,7 +187,7 @@ $(() => {
         } else {
           $tiles.eq(this.currentPosition).attr('data-direction', this.direction)
           pacman.placeCharacter('pacman')
-          // this.playChomp()
+          this.playChomp()
         }
       })
     }
@@ -369,6 +369,11 @@ $(() => {
     }
     $highscoreSpan.text(window.localStorage.getItem('highscore'))
   }
+
+  $resetScore.on('click', () => {
+    score = 0
+    $scoreSpan.text(score)
+  })
 
   $resetHighscore.on('click', () => {
     window.localStorage.setItem('highscore', 0)

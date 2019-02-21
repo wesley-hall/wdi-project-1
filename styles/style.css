@@ -42,7 +42,7 @@ main .game-info .scores {
   padding: 2em;
 }
 
-#reset-highscore {
+main .game-info .scores .reset {
   font-size: 0.5em;
   font-style: italic;
   text-transform: uppercase;
@@ -50,11 +50,10 @@ main .game-info .scores {
   color: white;
   background-color: darkblue;
   border-radius: 5%;
-  margin: 0 5em;
   padding: 1em;
 }
 
-#reset-highscore:hover {
+main .game-info .scores .reset:hover {
   background-color: blue;
   cursor: pointer;
 }
@@ -165,6 +164,35 @@ main .gameboard {
 }
 
 
-.hidden {
-  display:none;
+.start-screen {
+  max-width: 60em;
+  margin: 0 auto;
+  text-align: center;
+  background-color: darkblue;
+  border-radius: 1em;
+  padding: 9em 3em;
+  display: flex;
+  flex-direction: column;
+  color: white;
+}
+
+.start-screen h2 {
+  font-size: 2.5em;
+  text-transform: uppercase;
+}
+
+.start-screen .instructions {
+  background-color: rgba(0,0,0,0.5);
+  border-radius: 1em;
+  padding: 1em;
+}
+
+.start-screen .instructions h3 {
+  margin: 2em 0;
+  font-size: 1.5em;
+  text-transform: uppercase;
+}
+
+.start-screen .instructions p {
+  margin: 2em 0;
 }

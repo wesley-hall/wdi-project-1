@@ -5,17 +5,37 @@
     <title></title>
     <link rel="stylesheet" href="./styles/animate.css">
     <link rel="stylesheet" href="./styles/style.css">
+    <link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="./scripts/main.js"></script>
   </head>
   <body>
-    <h1>PAC-MAN</h1>
-    <p>Score: <span id="score"></span></p>
-    <p>Highscore: <span id="highscore"></span></p>
-    <p>Lives: <span id="lives"></span></p>
-    <div class="gameboard"></div>
-    <h2 id="countdown"></h2>
-    <button id="start-game">START</button>
-    <button id="stop">Stop ghosts</button>
+    <heading>
+      <img src="./images/pacman-logo.png" alt="PAC-MAN">
+    </heading>
+    <main>
+      <section class="game-info">
+        <div class="scores">
+          <p>Score: <span id="score"></span></p>
+          <p>Highscore: <span id="highscore"></span></p>
+        </div>
+        <div class="lives">
+          <span>Lives: <span id="lives"></span></span>
+          <img class="life" src="./images/pacman-right.png">
+          <img class="life" src="./images/pacman-right.png">
+          <img class="life" src="./images/pacman-right.png">
+        </div>
+        <div class="controls">
+          <button id="start-game">START</button>
+          <button id="stop">Stop game</button>
+        </div>
+      </section>
+      <section>
+        <div class="gameboard"></div>
+      </section>
+    </main>
+    <section class="hidden">
+      <h2> Welcome to PAC-MAN</h2>
+    </section>
   </body>
 </html>

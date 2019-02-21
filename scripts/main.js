@@ -7,7 +7,7 @@ $(() => {
   const highScore = window.localStorage.getItem('highScore')
   const $scoreSpan = $('#score')
   const $highscoreSpan = $('#highscore')
-  const $livesSpan = $('#lives')
+  const $lifeImages = $('.life')
   const $pacmanDiv = $('.tile.pacman')
 
   // Create gamebord
@@ -23,7 +23,6 @@ $(() => {
     }
     $scoreSpan.text(score)
     $highscoreSpan.text(highScore)
-    $livesSpan.text(lives)
   }
 
   createBoard()
@@ -100,11 +99,11 @@ $(() => {
     }
     placeCharacter(characterName) {
       scoring()
-      if ($tiles.eq(pacman.currentPosition).hasClass('superfood')){
-        console.log('there is superfood here!')
-      }
       if ($tiles.eq(pacman.currentPosition).hasClass('ghost')) {
         lifeLost()
+      }
+      if ($tiles.eq(pacman.currentPosition).hasClass('superfood')){
+        this.modeFrightened()
       }
       $tiles.eq(this.currentPosition).removeClass('food superfood animated infinte flash')
       $tiles.removeClass(characterName)
@@ -126,6 +125,17 @@ $(() => {
         return true
       }
     }
+
+    modeFrightened() {
+      console.log('modeFrightened')
+      $('.ghost').addClass('blue')
+      setTimeout(this.modeChase, 5000)
+    }
+    modeChase() {
+      $('.ghost.blue').removeClass('blue')
+      placeGhosts()
+    }
+
   }
 
 
@@ -142,6 +152,7 @@ $(() => {
       super(startPosition)
       this.direction = directions.right
       this.nextPosition = this.currentPosition+= this.direction
+
     }
     // If this.currentPosition+= this.direction hasClass
     movePacman() {
@@ -149,29 +160,35 @@ $(() => {
         let previousPosition
         switch(e.keyCode) {
           case 37:
+            this.direction = directions.left
             previousPosition = this.currentPosition
-            this.nextPosition = this.currentPosition+= directions.left
+            this.nextPosition = this.currentPosition+= this.direction
             break
           case 38:
+            this.direction = directions.up
             previousPosition = this.currentPosition
-            this.nextPosition = this.currentPosition+= directions.up
+            this.nextPosition = this.currentPosition+= this.direction
             break
           case 39:
+            this.direction = directions.right
             previousPosition = this.currentPosition
-            this.nextPosition = this.currentPosition+= directions.right
+            this.nextPosition = this.currentPosition+= this.direction
             break
           case 40:
+            this.direction = directions.down
             previousPosition = this.currentPosition
-            this.nextPosition = this.currentPosition+= directions.down
+            this.nextPosition = this.currentPosition+= this.direction
             break
         }
         if (!this.pacMoveIsAllowed(this.nextPosition)) {
           this.currentPosition = previousPosition
         } else {
+          $tiles.eq(this.currentPosition).attr('data-direction', this.direction)
           pacman.placeCharacter('pacman')
         }
       })
     }
+
   }
   const pacman = new Pacman(370)
 
@@ -185,6 +202,7 @@ $(() => {
       this.direction = directions.right
       this.target = target
       this.ghostInterval
+
     }
     setGhostDirection() {
       this.direction = directionOptions[Math.floor(Math.random() * directionOptions.length)]
@@ -229,9 +247,13 @@ $(() => {
   const clyde = new Ghost(208, superfoodLevels.one[3])
 
   pacman.placeFirstCharacter('pacman')
-  pacman.movePacman()
+
+  // if (gameRunning) {
+    pacman.movePacman()
+  // }
 
   function startGame() {
+    gameRunning = true
     pacman.placeCharacter('pacman')
     blinky.moveGhosts()
     inky.moveGhosts()
@@ -242,6 +264,8 @@ $(() => {
   const $startButton = $('#start-game')
   $startButton.on('click', startGame)
 
+  const $stopButton = $('#stop')
+  $stopButton.on('click', stopGame)
 
 
 
@@ -267,11 +291,7 @@ $(() => {
 
 
 
-  // function modeFrightened() {
-  //   console.log('modeFrightened')
-  //   ghosts.removeClass('blinky inky pinky clyde')
-  //   ghosts.addCLass('blue animated infinite flash')
-  // }
+
 
 
 
@@ -307,9 +327,16 @@ $(() => {
   // Life lost
   function lifeLost() {
     lives--
-    $livesSpan.text(lives)
+    if (lives === 2) {
+      $lifeImages.eq(0).remove()
+    } else if (lives === 1) {
+      $lifeImages.eq(1).remove()
+    } else {
+      $lifeImages.remove()
+    }
     stopGame()
     if (lives > 0) {
+      $tiles.removeAttr('data-direction')
       pacman.currentPosition = pacman.startPosition
       setTimeout(() => {
         blinky.currentPosition = blinky.startPosition

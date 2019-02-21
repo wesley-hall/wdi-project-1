@@ -4,11 +4,15 @@ $(() => {
   let gameRunning = false
   let score = 0
   let lives = 3
-  const highScore = window.localStorage.getItem('highScore')
+  const highscore = window.localStorage.getItem('highscore')
+  const $gameoverMessage = $('#gameover')
   const $scoreSpan = $('#score')
   const $highscoreSpan = $('#highscore')
+  const $resetHighscore = $('#reset-highscore')
+  const $livesDiv = $('.lives')
   const $lifeImages = $('.life')
   const $pacmanDiv = $('.tile.pacman')
+  const audio = document.querySelector('audio')
 
   // Create gamebord
 
@@ -22,7 +26,7 @@ $(() => {
       // $gameboard.append('<div id="${i} class="tile"></div>')
     }
     $scoreSpan.text(score)
-    $highscoreSpan.text(highScore)
+    $highscoreSpan.text(highscore)
   }
 
   createBoard()
@@ -132,18 +136,11 @@ $(() => {
       setTimeout(this.modeChase, 5000)
     }
     modeChase() {
-      $('.ghost.blue').removeClass('blue')
+      $('.blue').removeClass('blue')
       placeGhosts()
     }
 
   }
-
-
-  //
-  // function modeChase() {
-  //   ghosts.removeClass('blue animated infinite flash')
-  //   ghosts.addCLass('blue animated infinite flash')
-  // }
 
 
   // Characters - Pac-Man
@@ -155,6 +152,11 @@ $(() => {
 
     }
     // If this.currentPosition+= this.direction hasClass
+    playChomp() {
+      console.log(audio)
+      audio.src = './audio/chomp.wav'
+      audio.play()
+    }
     movePacman() {
       $('body').on('keydown', (e) => {
         let previousPosition
@@ -185,6 +187,7 @@ $(() => {
         } else {
           $tiles.eq(this.currentPosition).attr('data-direction', this.direction)
           pacman.placeCharacter('pacman')
+          // this.playChomp()
         }
       })
     }
@@ -208,6 +211,7 @@ $(() => {
       this.direction = directionOptions[Math.floor(Math.random() * directionOptions.length)]
     }
     ghostIntelligentDirection() {
+      this.target = pacman.currentPosition
       const ghostDiff = this.target - this.currentPosition
       if (ghostDiff < 0) {
         if (ghostDiff % 20 === 0) { // alternative = Math.abs(ghostDiff) > 20, acts differently
@@ -226,13 +230,19 @@ $(() => {
     moveGhosts() {
       this.ghostInterval = setInterval(() => {
         const previousPosition = this.currentPosition
-        this.setGhostDirection()
+        // if (this.currentPosition % 20 === pacman.currentPosition % 20 || Math.abs(this.currentPosition - pacman.currentPosition < 5 )) {
+        //   this.ghostIntelligentDirection()
+        // } else {
+          this.setGhostDirection()
+        // }
         this.nextPosition = this.currentPosition+= this.direction
         if (this.ghostMoveIsAllowed(this.nextPosition)) {
           this.currentPosition= this.nextPosition
           placeGhosts()
         } else {
           this.currentPosition = previousPosition
+          this.setGhostDirection()
+          // this.ghostIntelligentDirection()
         }
         if ($tiles.eq(this.currentPosition).hasClass('pacman')) {
           lifeLost()
@@ -247,10 +257,8 @@ $(() => {
   const clyde = new Ghost(208, superfoodLevels.one[3])
 
   pacman.placeFirstCharacter('pacman')
+  pacman.movePacman()
 
-  // if (gameRunning) {
-    pacman.movePacman()
-  // }
 
   function startGame() {
     gameRunning = true
@@ -287,25 +295,6 @@ $(() => {
 
 
 
-
-
-
-
-
-
-
-
-
-
-  // function checkGhostMove(ghost) {
-  //   const nextMove = ghost.currentPosition+= ghostDirection
-  //   if ($tiles.eq(nextMove).hasClass('wall')) {
-  //     return false
-  //   } else {
-  //     return true
-  //   }
-  // }
-
   // Stop game
   function stopGame() {
     gameRunning = false
@@ -320,6 +309,12 @@ $(() => {
   function gameOver() {
     console.log('game over!!!')
     $gameboard.css({
+      display: 'none'
+    })
+    $gameoverMessage.css({
+      display: 'block'
+    })
+    $livesDiv.css({
       display: 'none'
     })
   }
@@ -364,8 +359,22 @@ $(() => {
       }
     }
     $scoreSpan.text(score)
+    checkHighscore()
     console.log(`score is ${score}`)
   }
+
+  function checkHighscore() {
+    if (score > highscore) {
+      window.localStorage.setItem('highscore', score)
+    }
+    $highscoreSpan.text(window.localStorage.getItem('highscore'))
+  }
+
+  $resetHighscore.on('click', () => {
+    window.localStorage.setItem('highscore', 0)
+    $highscoreSpan.text(window.localStorage.getItem('highscore'))
+  })
+
 
 
 

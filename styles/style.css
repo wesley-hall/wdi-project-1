@@ -30,15 +30,41 @@ main .game-info {
   margin: 2em;
 }
 
+main .game-info h2 {
+  display: none;
+  color: white;
+  text-transform: uppercase;
+}
+
 main .game-info .scores {
   background-color: #ee8d29;
   border-radius: 5%;
   padding: 2em;
 }
 
+#reset-highscore {
+  font-size: 0.5em;
+  font-style: italic;
+  text-transform: uppercase;
+  text-align: center;
+  color: white;
+  background-color: darkblue;
+  border-radius: 5%;
+  margin: 0 5em;
+  padding: 1em;
+}
+
+#reset-highscore:hover {
+  background-color: blue;
+  cursor: pointer;
+}
+
 main .game-info .lives {
-  padding: 2em 0;
+  display: flex;
   justify-content: flex-start;
+  align-items: center;
+  margin-left: 0.5em;
+  padding: 2em 0;
   color: white;
 }
 

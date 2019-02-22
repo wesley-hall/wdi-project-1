@@ -276,7 +276,7 @@ $(() => {
           this.currentPosition = this.startPosition
           placeGhosts()
         }
-      }, 150)
+      }, 200)
     }
   }
 

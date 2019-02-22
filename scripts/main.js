@@ -316,33 +316,33 @@ $(() => {
     clyde.moveGhosts()
   }
 
-  function restartGame() {
-    audio.src = './audio/intro.wav'
-    audio.play()
-    clearBoard()
-    // createBoard()
-    score = 0
-    lives = 3
-    placeFood()
-    placeWalls()
-    placeSuperfood()
-    $lifeImages.css({
-      display: 'block'
-    })
-    $gameboard.css({
-      display: 'flex'
-    })
-    $gameWonMessage.css({
-      display: 'none'
-    })
-    $restartButton.css({
-      display: 'none'
-    })
-    $livesDiv.css({
-      display: 'flex'
-    })
-    startGame()
-  }
+  // function restartGame() {
+  //   audio.src = './audio/intro.wav'
+  //   audio.play()
+  //   clearBoard()
+  //   // createBoard()
+  //   score = 0
+  //   lives = 3
+  //   placeFood()
+  //   placeWalls()
+  //   placeSuperfood()
+  //   $lifeImages.css({
+  //     display: 'block'
+  //   })
+  //   $gameboard.css({
+  //     display: 'flex'
+  //   })
+  //   $gameWonMessage.css({
+  //     display: 'none'
+  //   })
+  //   // $restartButton.css({
+  //   //   display: 'none'
+  //   // })
+  //   $livesDiv.css({
+  //     display: 'flex'
+  //   })
+  //   startGame()
+  // }
 
 
 
@@ -397,9 +397,9 @@ $(() => {
     $gameoverMessage.css({
       display: 'block'
     })
-    $restartButton.css({
-      display: 'block'
-    })
+    // $restartButton.css({
+    //   display: 'block'
+    // })
     $livesDiv.css({
       display: 'none'
     })
@@ -412,9 +412,9 @@ $(() => {
     $gameWonMessage.css({
       display: 'block'
     })
-    $restartButton.css({
-      display: 'block'
-    })
+    // $restartButton.css({
+    //   display: 'block'
+    // })
     $livesDiv.css({
       display: 'none'
     })

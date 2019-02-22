@@ -6,6 +6,7 @@ $(() => {
   let lives = 3
   const highscore = window.localStorage.getItem('highscore')
   const $gameoverMessage = $('#gameover')
+  const $gameWonMessage = $('#game-won')
   const $scoreSpan = $('#score')
   const $highscoreSpan = $('#highscore')
   const $resetScore = $('#reset-score')
@@ -28,11 +29,17 @@ $(() => {
       $gameboard.append('<div class="tile"></div>')
       // $gameboard.append('<div id="${i} class="tile"></div>')
     }
+    score = 0
+    lives = 3
     $scoreSpan.text(score)
     $highscoreSpan.text(highscore)
   }
 
   createBoard()
+
+  function clearBoard() {
+    $tiles.removeClass()
+  }
 
   const $tiles = $('.tile')
 
@@ -193,6 +200,10 @@ $(() => {
           pacman.placeCharacter('pacman')
           // this.playChomp()
         }
+        // console.log(`Food left: ${$tiles.toArray()}`)
+        if (!$tiles.toArray().some(tile => tile.classList.contains('food'))){
+          gameWon()
+        }
       })
     }
 
@@ -220,14 +231,26 @@ $(() => {
       if (ghostDiff < 0) {
         if (ghostDiff % 20 === 0) { // alternative = Math.abs(ghostDiff) > 20, acts differently
           this.direction = directions.up
+          if (ghostsAreBlue) {
+            this.direction = directions.down
+          }
         } else {
           this.direction = directions.left
+          if (ghostsAreBlue) {
+            this.direction = directions.right
+          }
         }
       } else if (ghostDiff > 0) {
         if (ghostDiff % 20 === 0) { // alternative = Math.abs(ghostDiff) > 20, acts differently
           this.direction = directions.down
+          if (ghostsAreBlue) {
+            this.direction = directions.up
+          }
         } else {
           this.direction = directions.right
+          if (ghostsAreBlue) {
+            this.direction = directions.left
+          }
         }
       } else {
         this.setGhostDirection()
@@ -236,11 +259,7 @@ $(() => {
     moveGhosts() {
       this.ghostInterval = setInterval(() => {
         const previousPosition = this.currentPosition
-        // if (Math.abs(this.currentPosition - pacman.currentPosition < 5 ) || this.currentPosition % 20 === pacman.currentPosition % 20) {
-        //   this.ghostIntelligentDirection()
-        // } else {
-          this.setGhostDirection()
-        // }
+        this.ghostIntelligentDirection()
         this.nextPosition = this.currentPosition+= this.direction
         if (this.ghostMoveIsAllowed(this.nextPosition)) {
           this.currentPosition= this.nextPosition
@@ -253,7 +272,11 @@ $(() => {
         if ($tiles.eq(this.currentPosition).hasClass('pacman')) {
           lifeLost()
         }
-      }, 250)
+        if (ghostsAreBlue && $tiles.eq(this.currentPosition).hasClass('pacman')) {
+          this.currentPosition = this.startPosition
+          placeGhosts()
+        }
+      }, 150)
     }
   }
 
@@ -269,8 +292,6 @@ $(() => {
   const $startScreen = $('.start-screen')
 
   function startGame() {
-    audio.src = './audio/intro.wav'
-    audio.play()
     setTimeout(() => {
       $startScreen.addClass('animated fadeOut 4s')
     }, 2500)
@@ -285,14 +306,51 @@ $(() => {
     },3250)
     gameRunning = true
     pacman.placeCharacter('pacman')
+    clearInterval(blinky.ghostInterval)
+    clearInterval(inky.ghostInterval)
+    clearInterval(pinky.ghostInterval)
+    clearInterval(clyde.ghostInterval)
     blinky.moveGhosts()
     inky.moveGhosts()
     pinky.moveGhosts()
     clyde.moveGhosts()
   }
 
+  function restartGame() {
+    audio.src = './audio/intro.wav'
+    audio.play()
+    clearBoard()
+    createBoard()
+    placeFood()
+    placeSuperfood()
+    startGame()
+    setTimeout( () => {
+      $gameboard.css({
+        display: 'flex'
+      })
+      $gameWonMessage.css({
+        display: 'none'
+      })
+      $restartButton.css({
+        display: 'none'
+      })
+      $livesDiv.css({
+        display: 'flex'
+      })
+    }, 1000)
+  }
+
+
+
   const $startButton = $('#start-game')
-  $startButton.on('click', startGame)
+  $startButton.on('click', () => {
+    audio.src = './audio/intro.wav'
+    audio.play()
+    startGame()
+  })
+
+  const $restartButton = $('#restart-game')
+  $restartButton.on('click', restartGame)
 
   const $stopButton = $('#stop')
   $stopButton.on('click', stopGame)
@@ -335,15 +393,37 @@ $(() => {
     $gameoverMessage.css({
       display: 'block'
     })
+    $restartButton.css({
+      display: 'block'
+    })
+    $livesDiv.css({
+      display: 'none'
+    })
+  }
+  function gameWon() {
+    console.log('You win!!!')
+    $gameboard.css({
+      display: 'none'
+    })
+    $gameWonMessage.css({
+      display: 'block'
+    })
+    $restartButton.css({
+      display: 'block'
+    })
     $livesDiv.css({
       display: 'none'
     })
   }
 
+
   // Life lost
   function lifeLost() {
     if (ghostsAreBlue) {
       score+= 100
+      audio.src = './audio/chomp_ghost.wav'
+      audio.play()
+      console.log('score + 100')
     } else {
       lives--
       if (lives === 2) {

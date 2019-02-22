@@ -16,7 +16,7 @@ heading {
   margin-bottom: 1em;
 }
 heading img {
-  width: 45%;
+  width: 40%;
 }
 
 main {
@@ -33,6 +33,7 @@ main .game-info {
 main .game-info h2 {
   display: none;
   color: white;
+  text-align: center;
   text-transform: uppercase;
 }
 
@@ -163,6 +164,13 @@ main .gameboard {
   background-image: url(../images/ghost-blue.gif);
 }
 
+.gameboard div.tile.ghost.blinky.eyes,
+.gameboard div.tile.ghost.inky.eyes,
+.gameboard div.tile.ghost.pinky.eyes,
+.gameboard div.tile.ghost.clyde.eyes {
+  background-image: url(../images/ghost-eyes.png);
+}
+
 
 .start-screen {
   max-width: 60em;
@@ -199,7 +207,8 @@ main .gameboard {
   line-height: 2em;
 }
 
-#start-game {
+#start-game,
+#restart-game {
   margin: 2em;
   color: black;
   font-size: 1.5em;
@@ -209,7 +218,13 @@ main .gameboard {
   border-radius: 1em;
 }
 
-#start-game:hover {
+#restart-game {
+  display:none;
+  font-size: 1em;
+}
+
+#start-game:hover,
+#restart-game:hover {
   background-color: #efad69;
   cursor: pointer;
 }

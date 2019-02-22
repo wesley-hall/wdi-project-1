@@ -73,7 +73,7 @@ main .game-info .lives img {
 }
 main .gameboard {
   margin: 0 2em;
-  max-width: 700px;
+  max-width: 65em;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -38,7 +38,7 @@ $(() => {
   createBoard()
 
   function clearBoard() {
-    $tiles.removeClass()
+    $tiles.removeClass('food superfood pacman ghost blinky pinky inky clyde blue')
   }
 
   const $tiles = $('.tile')
@@ -320,24 +320,28 @@ $(() => {
     audio.src = './audio/intro.wav'
     audio.play()
     clearBoard()
-    createBoard()
+    // createBoard()
+    score = 0
+    lives = 3
     placeFood()
+    placeWalls()
     placeSuperfood()
+    $lifeImages.css({
+      display: 'block'
+    })
+    $gameboard.css({
+      display: 'flex'
+    })
+    $gameWonMessage.css({
+      display: 'none'
+    })
+    $restartButton.css({
+      display: 'none'
+    })
+    $livesDiv.css({
+      display: 'flex'
+    })
     startGame()
-    setTimeout( () => {
-      $gameboard.css({
-        display: 'flex'
-      })
-      $gameWonMessage.css({
-        display: 'none'
-      })
-      $restartButton.css({
-        display: 'none'
-      })
-      $livesDiv.css({
-        display: 'flex'
-      })
-    }, 1000)
   }
 
 
@@ -427,11 +431,17 @@ $(() => {
     } else {
       lives--
       if (lives === 2) {
-        $lifeImages.eq(0).remove()
+        $lifeImages.eq(0).css({
+          display: 'none'
+        })
       } else if (lives === 1) {
-        $lifeImages.eq(1).remove()
+        $lifeImages.eq(1).css({
+          display: 'none'
+        })
       } else {
-        $lifeImages.remove()
+        $lifeImages.eq(2).css({
+          display: 'none'
+        })
       }
       stopGame()
       if (lives > 0) {

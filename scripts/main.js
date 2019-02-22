@@ -356,8 +356,8 @@ $(() => {
   const $restartButton = $('#restart-game')
   $restartButton.on('click', restartGame)
 
-  const $stopButton = $('#stop')
-  $stopButton.on('click', stopGame)
+  // const $stopButton = $('#stop')
+  // $stopButton.on('click', stopGame)
 
 
   function placeGhosts() {

@@ -353,8 +353,8 @@ $(() => {
     startGame()
   })
 
-  const $restartButton = $('#restart-game')
-  $restartButton.on('click', restartGame)
+  // const $restartButton = $('#restart-game')
+  // $restartButton.on('click', restartGame)
 
   // const $stopButton = $('#stop')
   // $stopButton.on('click', stopGame)
